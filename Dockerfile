@@ -16,25 +16,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # 2. Crea usuario y directorio de instance ANTES de cambiar de usuario
 RUN groupadd -r appuser -g 1000 && \
-    useradd -r -u 1000 -g appuser appuser && \
-    mkdir -p instance && \
-    chown appuser:appuser instance && \
-    chmod 755 instance
+    useradd -r -u 1000 -g appuser appuser
 
-# 3. Instala dependencias Python
+# 3. Crear directorio para archivos de instancia
+#RUN mkdir -p /app/instance && \
+#    chown appuser:appuser /app/instance && \
+#    chmod 755 /app/instance
+
+# 4. Instala dependencias Python
 COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt --no-cache-dir
 
-# 4. Copia el código
-# COPY app/ ./app/
-# COPY run.py .
+# 5. Copia el código
 COPY . .
 
-# Exponer el puerto en el que corre la aplicación
+# 6. Exponer el puerto en el que corre la aplicación
 EXPOSE ${PORT:-5000}
 
-# 6. Cambia al usuario no-root
+# 7. Cambia al usuario no-root
 USER appuser
 
 CMD ["python", "run.py"]
