@@ -27,8 +27,9 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt --no-cache-dir
 
 # 4. Copia el código
-COPY app/ ./app/
-COPY run.py .
+# COPY app/ ./app/
+# COPY run.py .
+COPY . .
 
 # Exponer el puerto en el que corre la aplicación
 EXPOSE ${PORT:-5000}
