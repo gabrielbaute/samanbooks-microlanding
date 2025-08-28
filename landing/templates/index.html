@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <!-- Contenedor central -->        
+      <div class="card has-text-centered">
+
+          <div class="card-image">
+              <figure class="image is-128x128 is-inline-block mt-4">
+              <img src="{{ url_for('static', filename='img/icon-512.png') }}" alt="Logo Expresarte">
+              </figure>
+              <h1 class="title is-6">Tu app de audiolibros en español</h1>
+          </div>
+
+          <!-- Botonera -->
+          <div class="section">
+              <button class="button is-fullwidth is-link is-outlined"><a href="{{ url_for('main.download_apk')}}">Descarga la APK</a></button>
+              <button class="button is-fullwidth is-link is-outlined"><a href="{{ url_for('main.planes')}}">Información de planes</a></button>
+              <button class="button is-fullwidth is-danger is-outlined"><a href="{{ url_for('main.fallas')}}">¿Fallas en el servidor?</a></button>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+
+{% endblock %}

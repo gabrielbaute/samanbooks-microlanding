@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">📥 Métricas de Descargas</h1>
+
+    <div class="box">
+      <h2 class="subtitle">Descargas por archivo</h2>
+      <table class="table is-striped is-fullwidth">
+        <thead>
+          <tr><th>Archivo</th><th>Descargas</th></tr>
+        </thead>
+        <tbody>
+          {% for item in filename_counts %}
+          <tr>
+            <td>{{ item.filename }}</td>
+            <td>{{ item.count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box">
+      <h2 class="subtitle">Descargas por día</h2>
+      <canvas id="downloadsChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('downloadsChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ daily_counts | map(attribute='day') | list | tojson }},
+    datasets: [{
+      label: 'Descargas',
+      data: {{ daily_counts | map(attribute='downloads_counts') | list | tojson }},
+      backgroundColor: 'rgba(54, 162, 235, 0.6)'
+    }]
+  },
+  options: {
+    scales: {
+      x: { title: { display: true, text: 'Fecha' }},
+      y: { title: { display: true, text: 'Cantidad' }, beginAtZero: true }
+    }
+  }
+});
+</script>
+{% endblock %}

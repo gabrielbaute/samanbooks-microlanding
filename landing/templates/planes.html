@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <!-- Contenedor central -->        
+      <div class="card has-text-centered">
+
+          <div class="card-image">
+              <figure class="image is-128x128 is-inline-block mt-4">
+              <img src="{{ url_for('static', filename='img/icon-512.png') }}" alt="Logo Expresarte">
+              </figure>
+              <h1 class="title is-4">Planes y precios</h1>
+              <br>
+          </div>
+
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">Estándar</p>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            El plan básico, destinado a usuarios que desean contar con los servicios esenciales.
+            Podrás acceder a toda la biblioteca de audiolibros, mientras estés online.
+            <br />
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="{{ url_for('main.download_apk')}}" class="card-footer-item">Descarga la app y crea tu cuenta</a>
+        </footer>
+      </div>
+
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">Premuim</p>
+          <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            Acceso total a la biblioteca de audiolibros, incluso sin conexión a internet.
+            Podrás descargar tus audiolibros favoritos y escucharlos en cualquier momento.
+            Descargas ilimiatadas. Acceso a la librería de ebooks y podcasts.
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="{{ url_for('main.download_apk')}}" class="card-footer-item">Descarga la app y crea tu cuenta</a>
+        </footer>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

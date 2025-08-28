@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <!-- Contenedor central -->        
+      <div class="card has-text-centered">
+
+          <div class="card-image">
+              <figure class="image is-128x128 is-inline-block mt-4">
+              <img src="{{ url_for('static', filename='img/icon-512.png') }}" alt="Logo Expresarte">
+              </figure>
+              <h1 class="title is-4">Sobre las fallas en el servidor</h1>
+          </div>
+          <!-- Contenido del disclaimer -->
+          <div class="content is-right-align p-4">
+            <article class="section">
+              <p class="media-left">
+                <strong>{{app_name}}</strong> opera como un servidor autohospedado en Venezuela, no en la nube.
+                Esto significa que cualquier interrupción en la conexión a Internet o problemas técnicos en el servidor pueden afectar la disponibilidad del servicio. No obstante, le recordamos que cualquier interrupción es temporal y se resuelve lo antes posible.
+              </p>
+              <p>
+                Estamos comprometidos a proporcionar un servicio confiable y de alta calidad a nuestros usuarios.
+                Sin embargo, debido a la naturaleza de nuestro entorno operativo, pueden ocurrir fallas ocasionales que están fuera de nuestro control inmediato.
+              </p>
+              <p>
+                Ante <strong>fallas eléctricas</strong>, considere períodos de tiempo de entre 1 a 2 horas para la restauración del servicio.
+              </p>
+              <p>
+                Agradecemos su comprensión y paciencia mientras trabajamos para mejorar continuamente la estabilidad y confiabilidad de nuestro servicio.
+              </p>
+            </article>
+          </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

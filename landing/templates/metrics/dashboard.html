@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Metrics{% endblock %}
+
+{% block content %}
+<h1 class="title is-3 has-text-centered">📈 Métricas de visitas</h1>
+
+<div class="box">
+  <h2 class="subtitle is-5">Visitas por día</h2>
+  <canvas id="visitsChart"></canvas>
+</div>
+
+<div class="box">
+  <h2 class="subtitle is-5">Rutas más visitadas</h2>
+  <table class="table is-striped is-fullwidth">
+    <thead>
+      <tr>
+        <th>Ruta</th>
+        <th>Visitas</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in route_counts %}
+      <tr>
+        <td><a href="{{ url_for('metrics.metrics_by_route', route=item.route[1:]) }}">{{ item.route }}</a></td>
+        <td>{{ item.count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = {{ daily_counts | map(attribute='day') | list | tojson }};
+    const data = {{ daily_counts | map(attribute='count') | list | tojson }};
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Visitas por día',
+                data: data,
+                borderColor: 'rgb(54, 162, 235)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Actividad reciente' }
+            }
+        }
+    };
+    new Chart(document.getElementById('visitsChart'), config);
+</script>
+{% endblock %}

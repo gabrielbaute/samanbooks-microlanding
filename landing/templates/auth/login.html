@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    
+    <div class="columns is-centered">
+      <div class="column is-one-third">
+        <div class="card has-text-centered">
+          <div class="card-content">
+            <h1 class="title has-text-centered">Inicio de sesión</h1>
+            
+            <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <!-- Email -->
+            <div class="field">
+              <label class="label">{{ form.email.label }}</label>
+              <div class="control has-icons-left">
+                {{ form.email(class="input", placeholder="Correo electrónico") }}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+              {% for error in form.email.errors %}
+                <p class="help is-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+              <label class="label">{{ form.password.label }}</label>
+              <div class="control has-icons-left">
+                {{ form.password(class="input", placeholder="Contraseña") }}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </div>
+              {% for error in form.password.errors %}
+                <p class="help is-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Enlace para recuperar contraseña -->
+            <div class="field has-text-right">
+              <a href="{{ url_for('auth.request_reset_password') }}" class="is-size-7 has-text-link">
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
+
+            <!-- Submit -->
+            <div class="field is-grouped">
+              <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                  {{ form.submit(class="button is-primary") }}
+                </div>
+              </div>
+            </div>
+
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

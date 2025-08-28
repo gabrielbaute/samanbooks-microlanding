@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Métricas de {{ route }}{% endblock %}
+
+{% block content %}
+<h1 class="title is-3 has-text-centered">📍 Métricas para <code>{{ route }}</code></h1>
+
+<div class="box">
+  <h2 class="subtitle is-5">Visitas por día</h2>
+  <canvas id="routeChart"></canvas>
+</div>
+
+<div class="box">
+  <h2 class="subtitle is-5">Últimas visitas</h2>
+  <table class="table is-fullwidth is-striped">
+    <thead>
+      <tr><th>IP</th><th>Agente</th><th>Fecha</th></tr>
+    </thead>
+    <tbody>
+      {% for v in visits %}
+      <tr>
+        <td>{{ v.ip }}</td>
+        <td>{{ v.user_agent }}</td>
+        <td>{{ v.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const labels = {{ daily_counts | map(attribute='day') | list | tojson }};
+const data = {{ daily_counts | map(attribute='count') | list | tojson }};
+
+new Chart(document.getElementById('routeChart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Visitas',
+      data: data,
+      backgroundColor: 'rgba(255, 99, 132, 0.5)'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Actividad por día' }
+    }
+  }
+});
+</script>
+{% endblock %}
