@@ -16,7 +16,7 @@ services:
       - LOG_UID=1000
       - LOG_GID=1000
     volumes:
-      - ./instance:/app/instance:rw
+      - ./instance:./instance:rw
     networks:
       - samanbooks-network
 
