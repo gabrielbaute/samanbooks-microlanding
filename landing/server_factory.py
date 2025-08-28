@@ -5,6 +5,7 @@ from landing.database import init_db, db
 from landing.config import Config, create_initial_admin
 from landing.server_extensions import init_migrate, init_login_manager, init_csrf
 from landing.routes import register_blueprints
+from landing.utils import get_banner
 
 def create_app():
     app = Flask(
@@ -22,6 +23,7 @@ def create_app():
     register_blueprints(app)
 
     with app.app_context():
+        print(get_banner(app.config["APP_NAME"]))
         db.create_all()
         create_initial_admin()
     
