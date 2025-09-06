@@ -25,6 +25,11 @@ class Config:
     LANGUAGE = os.environ.get("LANGUAGE")
     SCHEDULER_API_ENABLED = os.environ.get("SCHEDULER_API_ENABLED") or True
 
+    # Webhook
+    WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+    NTFY_URL = os.getenv('NTFY_URL')
+    NTFY_TOPIC = os.getenv('NTFY_TOPIC')
+
     # Variables de entorno para el administrador
     ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'Admin')
     ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@escuela.com')
