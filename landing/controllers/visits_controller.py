@@ -1,6 +1,6 @@
+import logging
 from datetime import datetime, timedelta
 from typing import List, Optional
-from flask import current_app
 from sqlalchemy import func
 
 from landing.database.models import Visits
@@ -10,12 +10,15 @@ from landing.schemas import VisitsCreate, VisitsResponse
 class VisitsController(DatabaseController):
     def __init__(self, db):
         super().__init__(db)
+        self.controller_name = 'VisitsController'
+        self.logger = logging.getLogger(f'[{self.controller_name}]')
 
     def register_visit(self, data: VisitsCreate) -> VisitsResponse:
         """Registra una visita con la ruta actual y timestamp."""
         visit = Visits(route=data.route, date=data.date)
         self.session.add(visit)
         self._commit_or_rollback()
+        self.logger.debug(f'Visita registrada: {visit.route}')
         return self._to_response(visit, VisitsResponse)
 
     def get_visits_by_day(self, day: datetime) -> List[VisitsResponse]:
@@ -23,11 +26,13 @@ class VisitsController(DatabaseController):
         start = datetime(day.year, day.month, day.day)
         end = start + timedelta(days=1)
         visits = Visits.query.filter(Visits.date >= start, Visits.date < end).all()
+        self.logger.debug(f'Visitas encontradas: {len(visits)}')
         return self._bulk_to_response(visits, VisitsResponse)
 
     def get_visits_by_range(self, start: datetime, end: datetime) -> List[VisitsResponse]:
         """Obtiene visitas entre dos fechas."""
         visits = Visits.query.filter(Visits.date >= start, Visits.date <= end).all()
+        self.logger.debug(f'Visitas encontradas: {len(visits)}')
         return self._bulk_to_response(visits, VisitsResponse)
 
     def get_daily_counts(self, start: datetime, end: datetime) -> List[dict]:
@@ -42,6 +47,7 @@ class VisitsController(DatabaseController):
             .order_by(func.date(Visits.date))
             .all()
         )
+        self.logger.debug(f'Conteo de visitas por día: {len(results)}')
         return [{"day": r.day, "count": r.count} for r in results]
 
     def get_route_counts(self, start: datetime, end: datetime) -> List[dict]:
@@ -56,10 +62,12 @@ class VisitsController(DatabaseController):
             .order_by(func.count().desc())
             .all()
         )
+        self.logger.debug(f'Conteo de visitas por ruta: {len(results)}')
         return [{"route": r.route, "count": r.count} for r in results]
 
     def get_visits_for_route(self, route: str):
         """Obtiene las últimas 100 visitas para una ruta específica."""
+        self.logger.debug(f'Obteniendo las últimas 100 visitas para la ruta: {route}')
         return Visits.query.filter_by(route=route).order_by(Visits.date.desc()).limit(100).all()
 
     def get_daily_counts_for_route(self, route: str):
@@ -68,5 +76,5 @@ class VisitsController(DatabaseController):
             func.date(Visits.date).label('day'),
             func.count().label('count')
         ).filter_by(route=route).group_by(func.date(Visits.date)).order_by('day').all()
-
+        self.logger.debug(f'Conteo diario de visitas para la ruta: {route}')
         return [{"day": r.day, "count": r.count} for r in results]

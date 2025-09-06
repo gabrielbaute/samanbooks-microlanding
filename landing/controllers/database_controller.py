@@ -12,6 +12,7 @@ class DatabaseController:
     def __init__(self, db: SQLAlchemy):
         self.db = db
         self.session = self.db.session
+        self.controller_name = 'DatabaseController'
 
     def _commit_or_rollback(self) -> Union[bool, str]:
         """Intenta hacer commit de la sesión actual.
