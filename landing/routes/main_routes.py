@@ -2,7 +2,9 @@ from datetime import datetime
 from flask import Blueprint, request, render_template, flash, send_from_directory, url_for, redirect
 
 from landing.controllers import ControllerFactory
-from landing.schemas import VisitsCreate, DownloadsCreate
+from landing.webhook import NtfyWebhookService
+from landing.enums import WebhookPriority
+from landing.schemas import VisitsCreate, DownloadsCreate, WebhookPayload
 
 main_bp = Blueprint("main", __name__, template_folder="templates")
 
@@ -36,15 +38,29 @@ def fallas():
 @main_bp.route("/download-apk")
 def download_apk():
     flash(f"Descargando APK 👋", "success")
-
+    # Instancias
+    webhook = NtfyWebhookService()
     controller = ControllerFactory().get_controller("downloads")
-    controller.register_download(
-        DownloadsCreate(
+    download_data = DownloadsCreate(
             filename="SamanBooks-v0.1.0.apk",
             date=datetime.utcnow()
         )
+    webhook_payload = WebhookPayload(
+        event='Download',
+        priority=WebhookPriority.default,
+        description='Se ha generado una descarga',
+        tags='Download',
+        click=url_for('main.download_apk', _external=True),
+        title='Descarga de APK',
+        url=url_for('main.download_apk', _external=True),
+        data=download_data.to_dict()
     )
-
+    
+    # Registrar y emitir
+    controller.register_download(download_data)
+    webhook.emit(webhook_payload)
+    
+    # Enviar apk
     return send_from_directory(
         directory="static/uploads",
         path="SamanBooks-v0.1.0.apk",
