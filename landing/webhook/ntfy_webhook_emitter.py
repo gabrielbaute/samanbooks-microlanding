@@ -1,14 +1,15 @@
 import requests
 import logging
 from typing import Optional, Dict
+from flask import current_app
 
 from landing.schemas import WebhookPayload
 from landing.config import Config
 
 class NtfyWebhookService:
-    def __init__(self, topic: str):
-        self.topic = topic
-        self.webhook_url = f"https://ntfy.sh/{topic}"
+    def __init__(self):
+        self.topic = Config.NTFY_TOPIC
+        self.webhook_url = f"{Config.NTFY_URL}/{self.topic}"
         self.app_name = Config.APP_NAME
         self.app_version = Config.APP_VERSION
         self.service_name = 'NtfyWebhookService'
@@ -20,13 +21,19 @@ class NtfyWebhookService:
 
     def _format_headers(self, payload: WebhookPayload) -> Dict[str, str]:
         """Formatear los encabezados para NTFY."""
-        return {
-            "Title": payload.title or f"{self.app_name} - {payload.event}",
+        headers = {
             "Priority": payload.priority.value,
-            "Tags": payload.tags,
-            "Click": payload.url,
             "Topic": self.topic
         }
+        if payload.title:
+            headers["Title"] = payload.title
+        else:
+            headers["Title"] = f"{self.app_name} - {payload.event}"
+        if payload.tags:
+            headers["Tags"] = payload.tags
+        if payload.url:
+            headers["Click"] = payload.url
+        return headers
 
     def emit(self, payload: WebhookPayload) -> Optional[int]:
         """Emitir una notificación NTFY con el payload dado."""
