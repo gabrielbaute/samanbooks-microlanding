@@ -10,4 +10,4 @@ class WebhookPayload(BaseModel):
     click: Optional[str]
     title: Optional[str]
     url: Optional[str]
-    data: dict
+    data: Optional[dict]
