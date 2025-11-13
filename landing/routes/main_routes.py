@@ -42,7 +42,7 @@ def download_apk():
     webhook = NtfyWebhookService()
     controller = ControllerFactory().get_controller("downloads")
     download_data = DownloadsCreate(
-            filename="SamanBooks-v0.1.0.apk",
+            filename="SamanBooks-v0.1.1.apk",
             date=datetime.utcnow()
         )
     webhook_payload = WebhookPayload(
@@ -63,6 +63,6 @@ def download_apk():
     # Enviar apk
     return send_from_directory(
         directory="static/uploads",
-        path="SamanBooks-v0.1.0.apk",
+        path="SamanBooks-v0.1.1.apk",
         as_attachment=True
     )
